@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component,Inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Auth } from '../auth';
+import { AuthService } from '../auth.service';
+import { OKTA_AUTH } from '@okta/okta-angular';
+import { OktaAuth } from '@okta/okta-auth-js';
 
 
 @Component({
@@ -10,12 +12,12 @@ import { Auth } from '../auth';
   styleUrl: './login.css'
 })
 export class Login {
-  constructor(private auth: Auth, private router: Router) { }
+  constructor(@Inject(OKTA_AUTH) private oktaAuth: OktaAuth) {}
 
-  login() {
-    this.auth.login() ;
-      this.router.navigate(['/welcome']);
-     
+  //constructor(private auth: AuthService, private router: Router) { }
+
+  async login() {
+    await this.oktaAuth.signInWithRedirect();
   }
 
 }
